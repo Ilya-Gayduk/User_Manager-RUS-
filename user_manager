@@ -17,33 +17,40 @@ OPTION=$(dialog --title "User_Manager" --menu "Выберитие действи
 #
 # Конец блока меню
 #
-
+#
+# Начало скриптов вкладок
+#
 case $OPTION in
 	1)
-		dialog --ok-label "Создать" \
-		--title "User_Manager" \
-	  	--form "Добавить пользователя" \ 15 50 0 \
+		dialog --ok-label "Создать" --title "User_Manager" --form "Добавить пользователя" 15 50 0 \
 		"Логин:"  1 1 "$user" 	1 10 20 0 \
 		"Пароль:" 2 1 "$pass"  	2 10 20 0 \
 		"Группа:" 3 1 "$groups" 3 10 20 0 \
 		"UID:"    4 1 "$uid"    4 10 20 0 \
 		"GID:"    5 1 "$gid"    5 10 20 0 \
 		"Каталог: /home/" 6 1 "$home" 	6 16 14 0  3>&1 1>&2 2>&3
-		# useradd
+		#
+		# useradd $user $pass $group $uid $gid
+		#
+		#dialog --msgbox "Пользователь $user создан! \
+		#Данные:
+		#Пароль: $pass
+		#Группа: $groups
+		#UID: $uid
+		#GID: $gid
+		#Каталог: $home" 10 100
 		;;
 
 	2)
-		dialog --inputbox "Введите имя пользователя:"  10 40
+		user_input=$(dialog --inputbox "Введите имя пользователя:" 8 40 3>&1 1>&2 2>&3 3>&- )
 
-		USERMOD=$(dialog --ok-label "Изменить" \
-                --title "User_Manager" \
-                --form "Изменить пользователя $USERNM" \ 15 70 0 \
+		USERMOD=$(dialog --ok-label "Изменить" --title "User_Manager" --form "Изменить пользователя $user_input" 15 70 0 \
                 "Логин:"  1 1 "$user"   1 10 20 0 \
                 "Пароль:" 2 1 "$pass"   2 10 20 0 \
                 "Группа:" 3 1 "$groups" 3 10 20 0 \
                 "UID:"    4 1 "$uid"    4 10 20 0 \
                 "GID:"    5 1 "$gid"    5 10 20 0 \
-                "Каталог /home/:" 6 1 "$home"   6 17 20 0  3>&1 1>&2 2>&3)
+                "Каталог: /home/" 6 1 "$home"   6 16 14 0  3>&1 1>&2 2>&3)
                 # usermod
 
 		;;
