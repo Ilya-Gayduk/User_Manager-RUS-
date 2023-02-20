@@ -51,12 +51,34 @@ case $OPTION in
                 "UID:"    4 1 "$uid"    4 10 20 0 \
                 "GID:"    5 1 "$gid"    5 10 20 0 \
                 "Каталог: /home/" 6 1 "$home"   6 16 14 0  3>&1 1>&2 2>&3)
-                # usermod
-
+                #
+		# usermod
+		#
+		#
+                # useradd $user $pass $group $uid $gid
+                #
+                #dialog --msgbox "Пользователь $user изменен! \
+                #Данные:
+                #Пароль: $pass
+                #Группа: $groups
+                #UID: $uid
+                #GID: $gid
+                #Каталог: $home" 10 100
 		;;
 
 	3)
-		echo "Удалить пользователя"
+		user_del=$(dialog --inputbox "Введите имя пользователя:" 8 40 3>&1 1>&2 2>&3 3>&- ) #окно ввода имени удаляемого пользователя
+
+		dialog --title "Удалить пользователя" --clear  --yesno "Вы действительно хотите удалить пользователя $user_del?" 10 40
+
+			case $? in
+				0)
+        				userdel -r -f  $user_del;;
+    				1)
+        				echo "Выбрано 'Нет'.";;
+    				255)
+        				echo "Нажата клавиша ESC.";;
+			esac
 		;;
 
 	4)
@@ -64,6 +86,7 @@ case $OPTION in
 		;;
 
 	*)
+		clear
 		echo  "Выход"
 		;;
 esac
